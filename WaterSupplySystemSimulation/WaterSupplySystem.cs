@@ -1,10 +1,20 @@
-using System;
+﻿using System;
 using NetTopologySuite.Geometries;
+using OSMLSGlobalLibrary.Modules;
 
 namespace WaterSupplySystemSimulation
 {
-    public class Class1
+    public class WaterSupplySystem: OSMLSModule
     {
+        protected override void Initialize()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Update(long elapsedMilliseconds)
+        {
+            throw new NotImplementedException();
+        }
     }
     
     // Водозаборное сооружение
