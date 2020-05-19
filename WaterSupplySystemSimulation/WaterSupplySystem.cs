@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
 using NetTopologySuite.Geometries;
 using OSMLSGlobalLibrary.Map;
 using OSMLSGlobalLibrary.Modules;
@@ -9,7 +10,61 @@ namespace WaterSupplySystemSimulation
     {
         protected override void Initialize()
         {
-            throw new NotImplementedException();
+            var waterIntakeCoord = new Coordinate(4971565, 6250411);
+            var waterIntake = new WaterIntake(waterIntakeCoord);
+            MapObjects.Add(waterIntake);
+
+            var waterPumpCoord = new Coordinate(4970979, 6250473);
+            var waterPump = new WaterPump(waterPumpCoord);
+            MapObjects.Add(waterPump);
+
+            var treatmentFacilitiesCoord = new Coordinate(4968216, 6250901);
+            var treatmentFacilities = new TreatmentFacilities(treatmentFacilitiesCoord);
+            MapObjects.Add(treatmentFacilities);
+            
+            var reservoirCoord = new Coordinate(4968230, 6251527);
+            var reservoir = new Reservoir(reservoirCoord);
+            MapObjects.Add(reservoir);
+
+            var conduit = new List<Conduit>
+            {
+                new Conduit(new []
+                {
+                    reservoirCoord,
+                    new Coordinate(4969525, 6245020), new Coordinate(4959206, 6230638),
+                    new Coordinate(4956179, 6225452), new Coordinate(4951146, 6220512),
+                }),
+                new Conduit(new []
+                {
+                    reservoirCoord,
+                    new Coordinate(4968154, 6246190), new Coordinate(4961336, 6236609), 
+                    new Coordinate(4954702, 6227112), new Coordinate(4949605, 6221690),  
+                }),
+                new Conduit(new []
+                {
+                    reservoirCoord,
+                    new Coordinate(4967380, 6246826), new Coordinate(4948304, 6222447) 
+                }), 
+                new Conduit(new []
+                {
+                    reservoirCoord,
+                    new Coordinate(4946403, 6223302)
+                }),
+                new Conduit(new []
+                {
+                    reservoirCoord,
+                    new Coordinate(4963582, 6249539), new Coordinate(4943335, 6223579) 
+                }),
+                new Conduit(new []
+                {
+                    reservoirCoord,
+                    new Coordinate(4961002, 6251345), new Coordinate(4934220, 6221640)  
+                }) 
+            };
+            foreach (var elem in conduit)
+            {
+                MapObjects.Add(elem);
+            }
         }
 
         public override void Update(long elapsedMilliseconds)
