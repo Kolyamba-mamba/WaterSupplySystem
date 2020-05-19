@@ -1,5 +1,6 @@
 using System;
 using NetTopologySuite.Geometries;
+using OSMLSGlobalLibrary.Map;
 using OSMLSGlobalLibrary.Modules;
 
 namespace WaterSupplySystemSimulation
