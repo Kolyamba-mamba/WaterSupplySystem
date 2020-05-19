@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using NetTopologySuite.Geometries;
 using OSMLSGlobalLibrary.Modules;
 
@@ -42,9 +42,9 @@ namespace WaterSupplySystemSimulation
     }
     
     // Водопровод
-    public class Conduit : Point
+    public class Conduit : LineString
     {
-        public Conduit(Coordinate coordinate) : base(coordinate) {}
+        public Conduit(Coordinate[] points) : base(points) { }
     }
     
     // Пользователь
