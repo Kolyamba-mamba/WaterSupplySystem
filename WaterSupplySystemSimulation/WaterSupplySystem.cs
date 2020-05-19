@@ -13,9 +13,7 @@ namespace WaterSupplySystemSimulation
         }
 
         public override void Update(long elapsedMilliseconds)
-        {
-            throw new NotImplementedException();
-        }
+        { }
     }
     
     // Водозаборное сооружение
