@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NetTopologySuite.Geometries;
@@ -128,6 +128,49 @@ namespace WaterSupplySystemSimulation
         public static double Distance(this Point p1, Point p2) => Math.Sqrt(Math.Pow(p1.X - p2.X, 2) + Math.Pow(p1.Y - p2.Y, 2));
         public static double Distance(this Coordinate c1, Coordinate c2) 
             => Math.Sqrt(Math.Pow(c1.X - c2.X, 2) + Math.Pow(c1.Y - c2.Y, 2));
+        
+        public static Coordinate GetNearestPoint(this Geometry point, IEnumerable<Conduit> conduits)
+        {
+            var min = double.MaxValue;
+            Coordinate coordinateFirstPoint = null;
+            Coordinate coordinateSecondPoint = null;
+            Conduit usingConduit = null;
+            foreach (var conduit in conduits)
+            {
+                foreach (var coordinate in conduit.Coordinates)
+                {
+                    var dist = point.Coordinate.Distance(coordinate);
+                    if (!(dist < min)) continue;
+                    min = dist;
+                    usingConduit = conduit;
+                    coordinateFirstPoint = coordinate;
+                }  
+            }
+            
+            min = double.MaxValue;
+            foreach (var coordinate in usingConduit?.Coordinates)
+            {
+                var dist = point.Coordinate.Distance(coordinate);
+                if ((!(dist < min)) || (coordinate == coordinateFirstPoint)) continue;
+                min = dist;
+                coordinateSecondPoint = coordinate;
+            }
+
+            return point.Coordinate.SearchingHeightCoordinate(coordinateFirstPoint, coordinateSecondPoint);
+        }
+    }
+
+    public static class CoordinateExtension
+    {
+        public static Coordinate SearchingHeightCoordinate(this Coordinate A, Coordinate B, Coordinate C)
+        {
+            var Ax = C.X - B.X;
+            var Ay = C.Y - B.Y;
+            var Tmin = (Ax * (A.X - B.X) + Ay * (A.Y - B.Y)) / (Math.Pow(Ax, 2) + Math.Pow(Ay, 2));
+            var X = B.X + Ax * Tmin;
+            var Y = B.Y + Ay * Tmin;
+            return new Coordinate(X, Y);
+        }
     }
     
     // Водозаборное сооружение
