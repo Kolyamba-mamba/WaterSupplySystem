@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NetTopologySuite.Geometries;
 using OSMLSGlobalLibrary.Map;
 using OSMLSGlobalLibrary.Modules;
@@ -105,6 +106,20 @@ namespace WaterSupplySystemSimulation
             {
                 MapObjects.Remove(water);
             }
+        }
+
+        private Coordinate GetNearestPoint(Geometry point, IEnumerable<Conduit> conduits)
+        {
+            var min = double.MaxValue;
+            Coordinate result = null;
+            foreach (var coordinate in conduits.SelectMany(conduit => conduit.Coordinates))
+            {
+                var dist = PointExtension.Distance(point.Coordinate, coordinate);
+                if (!(dist < min)) continue;
+                min = dist;
+                result = coordinate;
+            }
+            return result;
         }
     }
 
