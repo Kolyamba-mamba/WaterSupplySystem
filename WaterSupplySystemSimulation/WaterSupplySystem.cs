@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using NetTopologySuite.Geometries;
 using OSMLSGlobalLibrary.Map;
@@ -75,7 +75,31 @@ namespace WaterSupplySystemSimulation
         }
 
         public override void Update(long elapsedMilliseconds)
-        { }
+        {
+            if (MapObjects.Get<Water>().Count == 0)
+            {
+                var waterToPump = new Water(new Coordinate(waterIntakeCoord), -2.93, moveY: 0.31 );
+                MapObjects.Add(waterToPump);
+            }
+            var water = MapObjects.Get<Water>()[0];
+            var waterPump = MapObjects.Get<WaterPump>()[0];
+            var treatmentFacilities = MapObjects.Get<TreatmentFacilities>()[0];
+            var reservoir = MapObjects.Get<Reservoir>()[0];
+            water.Move();
+            if (water.InPlace(waterPump))
+            {
+                (water._moveX, water._moveY) = (-2.763 , 0.428);
+            }
+
+            if (water.InPlace(treatmentFacilities))
+            {
+                (water._moveX, water._moveY) = (0.07, 3.13);
+            }
+            if (water.InPlace(reservoir))
+            {
+                MapObjects.Remove(water);
+            }
+        }
     }
 
     public static class PointExtension
