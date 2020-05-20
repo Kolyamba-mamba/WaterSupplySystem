@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using NetTopologySuite.Geometries;
 using OSMLSGlobalLibrary.Map;
 using OSMLSGlobalLibrary.Modules;
@@ -107,28 +106,10 @@ namespace WaterSupplySystemSimulation
                 MapObjects.Remove(water);
             }
         }
-
-        private Coordinate GetNearestPoint(Geometry point, IEnumerable<Conduit> conduits)
-        {
-            var min = double.MaxValue;
-            Coordinate result = null;
-            foreach (var coordinate in conduits.SelectMany(conduit => conduit.Coordinates))
-            {
-                var dist = PointExtension.Distance(point.Coordinate, coordinate);
-                if (!(dist < min)) continue;
-                min = dist;
-                result = coordinate;
-            }
-            return result;
-        }
     }
 
     public static class PointExtension
     {
-        public static double Distance(this Point p1, Point p2) => Math.Sqrt(Math.Pow(p1.X - p2.X, 2) + Math.Pow(p1.Y - p2.Y, 2));
-        public static double Distance(this Coordinate c1, Coordinate c2) 
-            => Math.Sqrt(Math.Pow(c1.X - c2.X, 2) + Math.Pow(c1.Y - c2.Y, 2));
-        
         public static Coordinate GetNearestPoint(this Geometry point, IEnumerable<Conduit> conduits)
         {
             var min = double.MaxValue;
@@ -339,7 +320,7 @@ namespace WaterSupplySystemSimulation
 
         public bool InPlace(Point point)
         {
-            return PointExtension.Distance(this, point) < 10;
+            return Distance(point) < 10;
         }
 
         public void Move()
