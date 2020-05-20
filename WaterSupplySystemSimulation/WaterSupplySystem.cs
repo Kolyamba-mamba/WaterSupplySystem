@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using NetTopologySuite.Geometries;
 using OSMLSGlobalLibrary.Map;
@@ -111,6 +111,8 @@ namespace WaterSupplySystemSimulation
     public static class PointExtension
     {
         public static double Distance(this Point p1, Point p2) => Math.Sqrt(Math.Pow(p1.X - p2.X, 2) + Math.Pow(p1.Y - p2.Y, 2));
+        public static double Distance(this Coordinate c1, Coordinate c2) 
+            => Math.Sqrt(Math.Pow(c1.X - c2.X, 2) + Math.Pow(c1.Y - c2.Y, 2));
     }
     
     // Водозаборное сооружение
