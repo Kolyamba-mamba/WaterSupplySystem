@@ -26,6 +26,13 @@ namespace WaterSupplySystemSimulation
             var reservoir = new Reservoir(reservoirCoord);
             MapObjects.Add(reservoir);
 
+            var pipeline = new Pipeline(new []
+            {
+                waterIntakeCoord, waterPumpCoord,
+                treatmentFacilitiesCoord, reservoirCoord
+            });
+            MapObjects.Add(pipeline);
+
             var conduit = new List<Conduit>
             {
                 new Conduit(new []
