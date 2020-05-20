@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using NetTopologySuite.Geometries;
 using OSMLSGlobalLibrary.Map;
@@ -78,6 +78,9 @@ namespace WaterSupplySystemSimulation
             {
                 MapObjects.Add(elem);
             }
+            
+            var user = new User(new Coordinate(4950600, 6223050));
+            MapObjects.Add(user);
         }
 
         public override void Update(long elapsedMilliseconds)
@@ -91,6 +94,8 @@ namespace WaterSupplySystemSimulation
             var waterPump = MapObjects.Get<WaterPump>()[0];
             var treatmentFacilities = MapObjects.Get<TreatmentFacilities>()[0];
             var reservoir = MapObjects.Get<Reservoir>()[0];
+            var conduit = MapObjects.GetAll<Conduit>();
+            var user = MapObjects.Get<User>()[0];
             water.Move();
             if (water.InPlace(waterPump))
             {
@@ -105,6 +110,8 @@ namespace WaterSupplySystemSimulation
             {
                 MapObjects.Remove(water);
             }
+            var waterToUser = new Water(user.GetNearestPoint(conduit), 0, 0);
+            MapObjects.Add(waterToUser);
         }
     }
 
