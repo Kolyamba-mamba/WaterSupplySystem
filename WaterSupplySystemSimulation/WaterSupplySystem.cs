@@ -8,21 +8,21 @@ namespace WaterSupplySystemSimulation
 {
     public class WaterSupplySystem: OSMLSModule
     {
+        Coordinate waterIntakeCoord = new Coordinate(4971565, 6250411);
+        Coordinate waterPumpCoord = new Coordinate(4970979, 6250473);
+        Coordinate treatmentFacilitiesCoord = new Coordinate(4968216, 6250901);
+        Coordinate reservoirCoord = new Coordinate(4968230, 6251527);
         protected override void Initialize()
         {
-            var waterIntakeCoord = new Coordinate(4971565, 6250411);
             var waterIntake = new WaterIntake(waterIntakeCoord);
             MapObjects.Add(waterIntake);
-
-            var waterPumpCoord = new Coordinate(4970979, 6250473);
+            
             var waterPump = new WaterPump(waterPumpCoord);
             MapObjects.Add(waterPump);
-
-            var treatmentFacilitiesCoord = new Coordinate(4968216, 6250901);
+            
             var treatmentFacilities = new TreatmentFacilities(treatmentFacilitiesCoord);
             MapObjects.Add(treatmentFacilities);
             
-            var reservoirCoord = new Coordinate(4968230, 6251527);
             var reservoir = new Reservoir(reservoirCoord);
             MapObjects.Add(reservoir);
 
