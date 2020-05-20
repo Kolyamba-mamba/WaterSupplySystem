@@ -177,6 +177,19 @@ namespace WaterSupplySystemSimulation
     {
         public Conduit(Coordinate[] points) : base(points) { }
     }
+
+    [CustomStyle(
+        @"new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: 'rgba(0, 0, 0, 0.2)',
+                width: 2
+            })
+        })"
+    )]
+    public class Pipeline : LineString
+    {
+        public Pipeline(Coordinate[] points) : base(points) { }
+    }
     
     // Пользователь
     [CustomStyle(
@@ -198,5 +211,44 @@ namespace WaterSupplySystemSimulation
     public class User : Point
     {
         public User(Coordinate coordinate) : base(coordinate) {}
+    }
+
+    [CustomStyle(
+        @"new ol.style.Style({
+        image: new ol.style.Circle({
+            opacity: 1.0,
+            scale: 1.0,
+            radius: 3,
+            fill: new ol.style.Fill({
+                color: 'rgba(51, 153, 255, 0.8)'
+            }),
+            stroke: new ol.style.Stroke({
+                color: 'rgba(0, 0, 0, 0.4)',
+                width: 1
+            }),
+        })
+    });
+    ")]
+    public class Water : Point
+    {
+        public double _moveX { get; set; }
+        public double _moveY { get; set; }
+
+        public Water(Coordinate coordinate, double moveX, double moveY) : base(coordinate)
+        {
+            _moveX = moveX;
+            _moveY = moveY;
+        }
+
+        public bool InPlace(Point point)
+        {
+            return PointExtension.Distance(this, point) < 10;
+        }
+
+        public void Move()
+        {
+            X += _moveX;
+            Y += _moveY;
+        }
     }
 }
