@@ -1,4 +1,5 @@
-﻿using NetTopologySuite.Geometries;
+using System;
+using NetTopologySuite.Geometries;
 using OSMLSGlobalLibrary.Map;
 
 namespace WaterSupplySystemSimulation
@@ -66,7 +67,18 @@ namespace WaterSupplySystemSimulation
     ")]
     public class WaterPump : Point
     {
-        public WaterPump(Coordinate coordinate) : base(coordinate) {}
+        Random rnd = new Random();
+        public double _failureChance { get; }//Шанс поломки
+
+        public WaterPump(Coordinate coordinate, double failureChance) : base(coordinate)
+        {
+            _failureChance = failureChance;
+        }
+        
+        public bool CheckFailure()//Проверка поломки
+        {
+            return rnd.NextDouble() <= _failureChance;
+        }
     }
     
     // Очистные сооружения

@@ -22,7 +22,7 @@ namespace WaterSupplySystemSimulation
             var waterIntake = new WaterIntake(waterIntakeCoord);
             MapObjects.Add(waterIntake);
             
-            var waterPump = new WaterPump(waterPumpCoord);
+            var waterPump = new WaterPump(waterPumpCoord, 0.001);
             MapObjects.Add(waterPump);
             
             var treatmentFacilities = new TreatmentFacilities(treatmentFacilitiesCoord);
