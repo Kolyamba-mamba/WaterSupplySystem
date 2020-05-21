@@ -87,7 +87,8 @@ namespace WaterSupplySystemSimulation
         {
             if (MapObjects.Get<Water>().Count == 0)
             {
-                var waterToPump = new Water(new Coordinate(waterIntakeCoord), -2.93, moveY: 0.31 );
+                var waterToPump = new Water(new Coordinate(waterIntakeCoord), 
+                    MoveValue(waterIntakeCoord, waterPumpCoord, 200));
                 MapObjects.Add(waterToPump);
             }
             var water = MapObjects.Get<Water>()[0];
@@ -99,20 +100,25 @@ namespace WaterSupplySystemSimulation
             water.Move();
             if (water.InPlace(waterPump))
             {
-                (water._moveX, water._moveY) = (-2.763 , 0.428);
+                (water._moveX, water._moveY) = 
+                    MoveValue(waterPumpCoord, treatmentFacilitiesCoord, 1000);
             }
 
             if (water.InPlace(treatmentFacilities))
             {
-                (water._moveX, water._moveY) = (0.07, 3.13);
+                (water._moveX, water._moveY) = 
+                    MoveValue(treatmentFacilitiesCoord, reservoirCoord, 200);
             }
             if (water.InPlace(reservoir))
             {
                 MapObjects.Remove(water);
             }
-            var waterToUser = new Water(user.GetNearestPoint(conduit), 0, 0);
+            var waterToUser = new Water(user.GetNearestPoint(conduit), (0, 0));
             MapObjects.Add(waterToUser);
         }
+
+        private static (double, double) MoveValue(Coordinate start, Coordinate end, int value) 
+            => (((end.X - start.X) / value), (end.Y - start.Y) / value);
     }
 
     public static class PointExtension
@@ -319,8 +325,9 @@ namespace WaterSupplySystemSimulation
         public double _moveX { get; set; }
         public double _moveY { get; set; }
 
-        public Water(Coordinate coordinate, double moveX, double moveY) : base(coordinate)
+        public Water(Coordinate coordinate, (double moveX, double moveY) tuple) : base(coordinate)
         {
+            var (moveX, moveY) = tuple;
             _moveX = moveX;
             _moveY = moveY;
         }
