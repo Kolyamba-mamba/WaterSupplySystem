@@ -17,6 +17,7 @@ namespace WaterSupplySystemSimulation
         Coordinate treatmentFacilitiesCoord = new Coordinate(4968216, 6250901);
         Coordinate reservoirCoord = new Coordinate(4968230, 6251527);
         Random rnd = new Random();
+        int waterFromRiver;
         protected override void Initialize()
         {
             var waterIntake = new WaterIntake(waterIntakeCoord);
