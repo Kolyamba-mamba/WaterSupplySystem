@@ -52,8 +52,14 @@ namespace WaterSupplySystemSimulation
                 new Conduit(new []
                 {
                     reservoirCoord,
+                    new Coordinate(4969525, 6245020), new Coordinate(4966267, 6234051), 
+                    new Coordinate(4963209, 6224114)
+                }),
+                new Conduit(new []
+                {
+                    reservoirCoord,
                     new Coordinate(4969525, 6245020), new Coordinate(4959206, 6230638),
-                    new Coordinate(4956179, 6225452), new Coordinate(4951146, 6220512)
+                    new Coordinate(4956179, 6225452), new Coordinate(4951896, 6221262)
                 }),
                 new Conduit(new []
                 {
@@ -64,28 +70,39 @@ namespace WaterSupplySystemSimulation
                 new Conduit(new []
                 {
                     reservoirCoord,
-                    new Coordinate(4967380, 6246826), new Coordinate(4948304, 6222447) 
+                    new Coordinate(4967380, 6246826), new Coordinate(4960381, 6237949), 
+                    new Coordinate(4953807, 6229465), new Coordinate(4948304, 6222447) 
                 }), 
                 new Conduit(new []
                 {
-                    reservoirCoord,
-                    new Coordinate(4946403, 6223302)
+                    reservoirCoord, new Coordinate(4961298, 6242650), 
+                    new Coordinate(4953463, 6232370), new Coordinate(4946403, 6223302)
                 }),
                 new Conduit(new []
                 {
                     reservoirCoord,
-                    new Coordinate(4963582, 6249539), new Coordinate(4943335, 6223579) 
+                    new Coordinate(4963582, 6249539), new Coordinate(4957782, 6242077), 
+                    new Coordinate(4949680, 6231834), new Coordinate(4943335, 6223579) 
                 }),
                 new Conduit(new []
                 {
                     reservoirCoord,
-                    new Coordinate(4961002, 6251345), new Coordinate(4934220, 6221640)  
+                    new Coordinate(4961002, 6251345), new Coordinate(4955260, 6244752), 
+                    new Coordinate(4946011, 6234357), new Coordinate(4937526, 6224669)  
                 }),
                 new Conduit(new []
                 {
-                    new Coordinate(4951146, 6220512), new Coordinate(4949605, 6221690),
+                    reservoirCoord, 
+                    new Coordinate(4953884, 6251326),new Coordinate(4946164, 6245670), 
+                    new Coordinate(4939093, 6240548)   
+                }),
+                new Conduit(new []
+                {
+                    new Coordinate(4963209, 6224114), 
+                    new Coordinate(4951896, 6221262), new Coordinate(4949605, 6221690),
                     new Coordinate(4948304, 6222447), new Coordinate(4946403, 6223302),
-                    new Coordinate(4943335, 6223579), new Coordinate(4934220, 6221640)
+                    new Coordinate(4943335, 6223579), new Coordinate(4937526, 6224669),
+                    new Coordinate(4939093, 6240548)
                 })
             };
             foreach (var elem in conduit)
