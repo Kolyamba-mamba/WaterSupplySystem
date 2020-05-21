@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using NetTopologySuite.Geometries;
@@ -112,7 +112,7 @@ namespace WaterSupplySystemSimulation
                 MapObjects.Add(elem);
             }
 
-            foreach (var coordinate in GenerateCoordinatesUsers(150))
+            foreach (var coordinate in GenerateCoordinatesUsers(100))
             {
                 MapObjects.Add(new User(coordinate));
             }
@@ -135,7 +135,7 @@ namespace WaterSupplySystemSimulation
                     && waterFromRiver < reservoir._size - reservoir._volumeOfWaterInTheReservoir - 1000 )
                 {
                     var water = new RiverWater(new Coordinate(waterIntakeCoord),
-                        MoveValue(waterIntakeCoord, waterPumpCoord, 200));
+                        MoveValue(waterIntakeCoord, waterPumpCoord, 50));
                     MapObjects.Add(water);
                     waterFromRiver += rnd.Next(800, 1000);
                     Console.WriteLine($"Перемещение {waterFromRiver} литров воды в резервуары");
@@ -149,13 +149,13 @@ namespace WaterSupplySystemSimulation
                         if (water.InPlace(waterPump))
                         {
                             (water._moveX, water._moveY) =
-                                MoveValue(waterPumpCoord, treatmentFacilitiesCoord, 1000);
+                                MoveValue(waterPumpCoord, treatmentFacilitiesCoord, 200);
                         }
 
                         if (water.InPlace(treatmentFacilities))
                         {
                             (water._moveX, water._moveY) =
-                                MoveValue(treatmentFacilitiesCoord, reservoirCoord, 200);
+                                MoveValue(treatmentFacilitiesCoord, reservoirCoord, 50);
                         }
 
                         if (water.InPlace(reservoir))
@@ -175,7 +175,7 @@ namespace WaterSupplySystemSimulation
                         if (user.flag) continue;
                         var waterToUserCoord = user.GetNearestPoint(conduit);
                         var waterToUser = new CleanWater(waterToUserCoord,
-                            MoveValue(waterToUserCoord, user.Coordinate, rnd.Next(100, 300)));
+                            MoveValue(waterToUserCoord, user.Coordinate, rnd.Next(50, 150)));
                         MapObjects.Add(waterToUser);
                         user.flag = true;
                     }
