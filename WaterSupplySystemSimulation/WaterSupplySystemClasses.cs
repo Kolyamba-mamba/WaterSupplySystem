@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using NetTopologySuite.Geometries;
 using OSMLSGlobalLibrary.Map;
 
@@ -45,7 +45,26 @@ namespace WaterSupplySystemSimulation
     ")]
     public class Reservoir : Point
     {
-        public Reservoir(Coordinate coordinate) : base(coordinate) {}
+        public int _size { get; private set; }
+        public int _volumeOfWaterInTheReservoir { get; private set; }
+        public int _minVolumeOfWater = 17000;
+
+        public Reservoir(Coordinate coordinate, int size = 20000, int volumeOfWaterInTheReservoir = 10000) 
+            : base(coordinate)
+        {
+            _size = size;
+            _volumeOfWaterInTheReservoir = volumeOfWaterInTheReservoir;
+        }
+
+        public void GetWater(int volumeOfWater)
+        {
+            _volumeOfWaterInTheReservoir += volumeOfWater;
+        }
+
+        public void ToGiveWaterOfUser(int volumeOfWater)
+        {
+            _volumeOfWaterInTheReservoir -= volumeOfWater;
+        }
     }
     
     // Водяной насос
