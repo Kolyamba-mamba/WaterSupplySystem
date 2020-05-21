@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NetTopologySuite.Geometries;
 using OSMLSGlobalLibrary.Modules;
 
@@ -99,7 +100,7 @@ namespace WaterSupplySystemSimulation
                 MapObjects.Add(water);
             }
 
-            if (riverWater == null) return;
+            if (riverWater != null)
             {
                 foreach (var water in riverWater)
                 {
@@ -120,6 +121,30 @@ namespace WaterSupplySystemSimulation
                     {
                         MapObjects.Remove(water);
                     }
+                }
+            }
+
+            if (users == null) return;
+            {
+                foreach (var user in users)
+                {
+                    if (user.flag) continue;
+                    var waterToUserCoord = user.GetNearestPoint(conduit);
+                    var waterToUser = new CleanWater(waterToUserCoord,
+                        MoveValue(waterToUserCoord, user.Coordinate, 50));
+                    MapObjects.Add(waterToUser);
+                    user.flag = true;
+                }
+                
+                if (cleanWater == null) return;
+                foreach (var water in cleanWater)
+                {
+                    foreach (var user in users.Where(user => water.InPlace(user)))
+                    {
+                        MapObjects.Remove(water);
+                        MapObjects.Remove(user);
+                    }
+                    water.Move();
                 }
             }
         }
