@@ -185,6 +185,7 @@ namespace WaterSupplySystemSimulation
                     {
                         foreach (var user in users.Where(user => water.InPlace(user)))
                         {
+                            reservoir.ToGiveWaterOfUser(rnd.Next(5, 25));
                             MapObjects.Remove(water);
                             MapObjects.Remove(user);
                             var newUserCoord = GenerateCoordinatesUsers(1);
