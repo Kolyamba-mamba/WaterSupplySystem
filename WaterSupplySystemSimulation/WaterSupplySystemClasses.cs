@@ -124,7 +124,7 @@ namespace WaterSupplySystemSimulation
         image: new ol.style.Circle({
             opacity: 1.0,
             scale: 1.0,
-            radius: 2,
+            radius: 4,
             fill: new ol.style.Fill({
                 color: 'rgba(255, 0, 0, 0.8)'
             }),
@@ -137,25 +137,10 @@ namespace WaterSupplySystemSimulation
     ")]
     public class User : Point
     {
+        public bool flag { get; set; }
         public User(Coordinate coordinate) : base(coordinate) {}
     }
-
-    [CustomStyle(
-        @"new ol.style.Style({
-        image: new ol.style.Circle({
-            opacity: 1.0,
-            scale: 1.0,
-            radius: 3,
-            fill: new ol.style.Fill({
-                color: 'rgba(51, 153, 255, 0.8)'
-            }),
-            stroke: new ol.style.Stroke({
-                color: 'rgba(0, 0, 0, 0.4)',
-                width: 1
-            }),
-        })
-    });
-    ")]
+    
     public class Water : Point
     {
         public double _moveX { get; set; }
@@ -178,5 +163,47 @@ namespace WaterSupplySystemSimulation
             X += _moveX;
             Y += _moveY;
         }
+    }
+    
+    [CustomStyle(
+        @"new ol.style.Style({
+        image: new ol.style.Circle({
+            opacity: 1.0,
+            scale: 1.0,
+            radius: 3,
+            fill: new ol.style.Fill({
+                color: 'rgba(0, 102, 102, 0.8)'
+            }),
+            stroke: new ol.style.Stroke({
+                color: 'rgba(0, 0, 0, 0.4)',
+                width: 1
+            }),
+        })
+    });
+    ")]
+    public class RiverWater : Water
+    {
+        public RiverWater(Coordinate coordinate, (double moveX, double moveY) tuple) : base(coordinate, tuple) { }
+    }
+    
+    [CustomStyle(
+        @"new ol.style.Style({
+        image: new ol.style.Circle({
+            opacity: 1.0,
+            scale: 1.0,
+            radius: 3,
+            fill: new ol.style.Fill({
+                color: 'rgba(102, 178, 255, 0.8)'
+            }),
+            stroke: new ol.style.Stroke({
+                color: 'rgba(0, 0, 0, 0.4)',
+                width: 1
+            }),
+        })
+    });
+    ")]
+    public class CleanWater : Water
+    {
+        public CleanWater(Coordinate coordinate, (double moveX, double moveY) tuple) : base(coordinate, tuple) { }
     }
 }
