@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using NetTopologySuite.Geometries;
@@ -126,60 +126,84 @@ namespace WaterSupplySystemSimulation
             var users = MapObjects.GetAll<User>();
             var riverWater = MapObjects.GetAll<RiverWater>();
             var cleanWater = MapObjects.GetAll<CleanWater>();
-            
-            if (MapObjects.Get<RiverWater>().Count == 0)
-            {
-                var water = new RiverWater(new Coordinate(waterIntakeCoord), 
-                    MoveValue(waterIntakeCoord, waterPumpCoord, 200));
-                MapObjects.Add(water);
-            }
 
-            if (riverWater != null)
+            // Проверяем не сломан ли насос
+            if (!waterPump.CheckFailure())
             {
-                foreach (var water in riverWater)
+                if (MapObjects.Get<RiverWater>().Count == 0)
                 {
-                    water.Move();
-                    if (water.InPlace(waterPump))
+                    var water = new RiverWater(new Coordinate(waterIntakeCoord),
+                        MoveValue(waterIntakeCoord, waterPumpCoord, 200));
+                    MapObjects.Add(water);
+                }
+
+                if (riverWater != null)
+                {
+                    foreach (var water in riverWater)
                     {
-                        (water._moveX, water._moveY) =
-                            MoveValue(waterPumpCoord, treatmentFacilitiesCoord, 1000);
+                        water.Move();
+                        if (water.InPlace(waterPump))
+                        {
+                            (water._moveX, water._moveY) =
+                                MoveValue(waterPumpCoord, treatmentFacilitiesCoord, 1000);
+                        }
+
+                        if (water.InPlace(treatmentFacilities))
+                        {
+                            (water._moveX, water._moveY) =
+                                MoveValue(treatmentFacilitiesCoord, reservoirCoord, 200);
+                        }
+
+                        if (water.InPlace(reservoir))
+                        {
+                            MapObjects.Remove(water);
+                        }
+                    }
+                }
+
+                if (users == null) return;
+                {
+                    foreach (var user in users)
+                    {
+                        if (user.flag) continue;
+                        var waterToUserCoord = user.GetNearestPoint(conduit);
+                        var waterToUser = new CleanWater(waterToUserCoord,
+                            MoveValue(waterToUserCoord, user.Coordinate, rnd.Next(100, 300)));
+                        MapObjects.Add(waterToUser);
+                        user.flag = true;
                     }
 
-                    if (water.InPlace(treatmentFacilities))
+                    if (cleanWater == null) return;
+                    foreach (var water in cleanWater)
                     {
-                        (water._moveX, water._moveY) =
-                            MoveValue(treatmentFacilitiesCoord, reservoirCoord, 200);
-                    }
+                        foreach (var user in users.Where(user => water.InPlace(user)))
+                        {
+                            MapObjects.Remove(water);
+                            MapObjects.Remove(user);
+                            var newUserCoord = GenerateCoordinatesUsers(1);
+                            MapObjects.Add(new User(newUserCoord.ElementAt(0)));
+                        }
 
-                    if (water.InPlace(reservoir))
-                    {
-                        MapObjects.Remove(water);
+                        water.Move();
                     }
                 }
             }
-
-            if (users == null) return;
+            else
             {
+                foreach (var river_water in riverWater)
+                {
+                    MapObjects.Remove(river_water);
+                }
+                foreach (var clean_water in cleanWater)
+                {
+                    MapObjects.Remove(clean_water);
+                }
+
                 foreach (var user in users)
                 {
-                    if (user.flag) continue;
-                    var waterToUserCoord = user.GetNearestPoint(conduit);
-                    var waterToUser = new CleanWater(waterToUserCoord,
-                        MoveValue(waterToUserCoord, user.Coordinate, 50));
-                    MapObjects.Add(waterToUser);
-                    user.flag = true;
+                    user.flag = false;
                 }
                 
-                if (cleanWater == null) return;
-                foreach (var water in cleanWater)
-                {
-                    foreach (var user in users.Where(user => water.InPlace(user)))
-                    {
-                        MapObjects.Remove(water);
-                        MapObjects.Remove(user);
-                    }
-                    water.Move();
-                }
             }
         }
 
