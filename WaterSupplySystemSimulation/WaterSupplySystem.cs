@@ -16,6 +16,7 @@ namespace WaterSupplySystemSimulation
         Coordinate waterPumpCoord = new Coordinate(4970979, 6250473);
         Coordinate treatmentFacilitiesCoord = new Coordinate(4968216, 6250901);
         Coordinate reservoirCoord = new Coordinate(4968230, 6251527);
+        Random rnd = new Random();
         protected override void Initialize()
         {
             var waterIntake = new WaterIntake(waterIntakeCoord);
@@ -109,9 +110,11 @@ namespace WaterSupplySystemSimulation
             {
                 MapObjects.Add(elem);
             }
-            
-            var user = new User(new Coordinate(4950600, 6223050));
-            MapObjects.Add(user);
+
+            foreach (var coordinate in GenerateCoordinatesUsers(150))
+            {
+                MapObjects.Add(new User(coordinate));
+            }
         }
 
         public override void Update(long elapsedMilliseconds)
@@ -182,6 +185,17 @@ namespace WaterSupplySystemSimulation
 
         private static (double, double) MoveValue(Coordinate start, Coordinate end, int value) 
             => (((end.X - start.X) / value), (end.Y - start.Y) / value);
+        
+        private IEnumerable<Coordinate> GenerateCoordinatesUsers(int number)
+        {
+            var usersList = new List<Coordinate>();
+            for (var i = 0; i < number; i++)
+            {
+                var coordinate = new Coordinate(rnd.Next(_leftX, _rightX), rnd.Next(_downY, _upY));
+                usersList.Add(coordinate);
+            }
+            return usersList;
+        }
     }
 
     public static class PointExtension
