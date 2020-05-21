@@ -84,36 +84,44 @@ namespace WaterSupplySystemSimulation
 
         public override void Update(long elapsedMilliseconds)
         {
-            if (MapObjects.Get<Water>().Count == 0)
-            {
-                var waterToPump = new Water(new Coordinate(waterIntakeCoord), 
-                    MoveValue(waterIntakeCoord, waterPumpCoord, 200));
-                MapObjects.Add(waterToPump);
-            }
-            var water = MapObjects.Get<Water>()[0];
             var waterPump = MapObjects.Get<WaterPump>()[0];
             var treatmentFacilities = MapObjects.Get<TreatmentFacilities>()[0];
             var reservoir = MapObjects.Get<Reservoir>()[0];
             var conduit = MapObjects.GetAll<Conduit>();
-            var user = MapObjects.Get<User>()[0];
-            water.Move();
-            if (water.InPlace(waterPump))
+            var users = MapObjects.GetAll<User>();
+            var riverWater = MapObjects.GetAll<RiverWater>();
+            var cleanWater = MapObjects.GetAll<CleanWater>();
+            
+            if (MapObjects.Get<RiverWater>().Count == 0)
             {
-                (water._moveX, water._moveY) = 
-                    MoveValue(waterPumpCoord, treatmentFacilitiesCoord, 1000);
+                var water = new RiverWater(new Coordinate(waterIntakeCoord), 
+                    MoveValue(waterIntakeCoord, waterPumpCoord, 200));
+                MapObjects.Add(water);
             }
 
-            if (water.InPlace(treatmentFacilities))
+            if (riverWater == null) return;
             {
-                (water._moveX, water._moveY) = 
-                    MoveValue(treatmentFacilitiesCoord, reservoirCoord, 200);
+                foreach (var water in riverWater)
+                {
+                    water.Move();
+                    if (water.InPlace(waterPump))
+                    {
+                        (water._moveX, water._moveY) =
+                            MoveValue(waterPumpCoord, treatmentFacilitiesCoord, 1000);
+                    }
+
+                    if (water.InPlace(treatmentFacilities))
+                    {
+                        (water._moveX, water._moveY) =
+                            MoveValue(treatmentFacilitiesCoord, reservoirCoord, 200);
+                    }
+
+                    if (water.InPlace(reservoir))
+                    {
+                        MapObjects.Remove(water);
+                    }
+                }
             }
-            if (water.InPlace(reservoir))
-            {
-                MapObjects.Remove(water);
-            }
-            var waterToUser = new Water(user.GetNearestPoint(conduit), (0, 0));
-            MapObjects.Add(waterToUser);
         }
 
         private static (double, double) MoveValue(Coordinate start, Coordinate end, int value) 
