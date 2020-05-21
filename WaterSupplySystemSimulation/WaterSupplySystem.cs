@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NetTopologySuite.Geometries;
@@ -8,6 +8,10 @@ namespace WaterSupplySystemSimulation
 {
     public class WaterSupplySystem: OSMLSModule
     {
+        private readonly int _leftX = 4937373;
+        private readonly int _rightX = 4969630;
+        private readonly int _downY = 6221210;
+        private readonly int _upY = 6251632;
         Coordinate waterIntakeCoord = new Coordinate(4971565, 6250411);
         Coordinate waterPumpCoord = new Coordinate(4970979, 6250473);
         Coordinate treatmentFacilitiesCoord = new Coordinate(4968216, 6250901);
@@ -32,6 +36,16 @@ namespace WaterSupplySystemSimulation
                 treatmentFacilitiesCoord, reservoirCoord
             });
             MapObjects.Add(pipeline);
+            
+            var polygon = new[]
+            {
+                new Coordinate(_leftX, _downY),
+                new Coordinate(_leftX, _upY),
+                new Coordinate(_rightX, _upY),
+                new Coordinate(_rightX, _downY),
+                new Coordinate(_leftX, _downY),
+            };
+            MapObjects.Add(new LinearRing(polygon));
 
             var conduit = new List<Conduit>
             {
