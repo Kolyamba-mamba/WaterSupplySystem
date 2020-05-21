@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NetTopologySuite.Geometries;
@@ -130,11 +130,14 @@ namespace WaterSupplySystemSimulation
             // Проверяем не сломан ли насос
             if (!waterPump.CheckFailure())
             {
-                if (MapObjects.Get<RiverWater>().Count == 0)
+                if (reservoir._volumeOfWaterInTheReservoir < reservoir._minVolumeOfWater 
+                    && waterFromRiver < reservoir._size - reservoir._volumeOfWaterInTheReservoir - 1000 )
                 {
                     var water = new RiverWater(new Coordinate(waterIntakeCoord),
                         MoveValue(waterIntakeCoord, waterPumpCoord, 200));
                     MapObjects.Add(water);
+                    waterFromRiver += rnd.Next(800, 1000);
+                    Console.WriteLine($"Перемещение {waterFromRiver} литров воды в резервуары");
                 }
 
                 if (riverWater != null)
@@ -156,7 +159,10 @@ namespace WaterSupplySystemSimulation
 
                         if (water.InPlace(reservoir))
                         {
+                            reservoir.GetWater(waterFromRiver);
+                            waterFromRiver = 0;
                             MapObjects.Remove(water);
+                            Console.WriteLine($"В резервуаре {reservoir._volumeOfWaterInTheReservoir} тонн воды");
                         }
                     }
                 }
@@ -190,6 +196,8 @@ namespace WaterSupplySystemSimulation
             }
             else
             {
+                Console.WriteLine("Насос сломался!");
+                waterFromRiver = 0;
                 foreach (var river_water in riverWater)
                 {
                     MapObjects.Remove(river_water);
