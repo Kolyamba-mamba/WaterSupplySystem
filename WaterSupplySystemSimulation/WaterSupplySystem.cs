@@ -18,6 +18,7 @@ namespace WaterSupplySystemSimulation
         Coordinate reservoirCoord = new Coordinate(4968230, 6251527);
         Random rnd = new Random();
         int waterFromRiver;
+        private bool errFlag;
         protected override void Initialize()
         {
             var waterIntake = new WaterIntake(waterIntakeCoord);
@@ -143,17 +144,24 @@ namespace WaterSupplySystemSimulation
 
                 if (riverWater != null)
                 {
+                    if (errFlag)
+                    {
+                        Console.WriteLine("Насос в норме!");
+                        errFlag = false;
+                    }
                     foreach (var water in riverWater)
                     {
                         water.Move();
                         if (water.InPlace(waterPump))
                         {
+                            Console.WriteLine("Насос пройден");
                             (water._moveX, water._moveY) =
                                 MoveValue(waterPumpCoord, treatmentFacilitiesCoord, 200);
                         }
 
                         if (water.InPlace(treatmentFacilities))
                         {
+                            Console.WriteLine("Система очистки пройдена");
                             (water._moveX, water._moveY) =
                                 MoveValue(treatmentFacilitiesCoord, reservoirCoord, 50);
                         }
@@ -199,6 +207,7 @@ namespace WaterSupplySystemSimulation
             else
             {
                 Console.WriteLine("Насос сломался!");
+                errFlag = true;
                 waterFromRiver = 0;
                 foreach (var river_water in riverWater)
                 {
